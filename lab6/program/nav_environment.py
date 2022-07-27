@@ -91,10 +91,10 @@ class NavigationEnv:
         # Terminal State
         done = False
         if collision:
-            reward = -15
+            #reward = ??
             done = True
         if curr_target_dist < 20:
-            reward = 20
+            #reward = ??
             done = True
 
         # Relative Coordinate of Target

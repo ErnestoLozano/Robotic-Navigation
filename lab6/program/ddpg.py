@@ -63,9 +63,9 @@ class DDPG():
         action = self.actor(s_ts)
         action = action.cpu().detach().numpy()[0]
         if eval == False:  # Use epsilon
-            action += np.random.normal(0, self.epsilon, action.shape)
+            action += ......
         else:  # Use final variance
-            action += np.random.normal(0, self.epsilon_params[1], action.shape)
+            action += ......
         action = np.clip(action, -1, 1)
         return action
 
@@ -113,11 +113,7 @@ class DDPG():
         end_batch = [self.memory["end"][index] for index in sample_index]
 
         # TODO(Lab-04): Construct torch tensor
-        s_ts = torch.FloatTensor(np.array(s_batch)).to(device)
-        a_ts = torch.FloatTensor(np.array(a_batch)).to(device)
-        r_ts = torch.FloatTensor(np.array(r_batch)).to(device).view(self.batch_size, 1)
-        sn_ts = torch.FloatTensor(np.array(sn_batch)).to(device)
-        end_ts = torch.FloatTensor(np.array(end_batch)).to(device).view(self.batch_size, 1)
+        
 
         # TODO(Lab-05): Compute critic loss and optimize
         with torch.no_grad():
@@ -127,26 +123,13 @@ class DDPG():
         
         # Critic loss
         q_eval = self.critic(s_ts, a_ts)
-        self.critic_loss = self.criterion(q_eval, q_target)
-
-        self.critic_optim.zero_grad()
-        self.critic_loss.backward()
-        self.critic_optim.step()
+        self.critic_loss = ...
 
         # TODO(Lab-06): Compute actor loss and optimize
         # Actor loss
-        a_curr = self.actor(s_ts)
-        q_current = self.critic(s_ts, a_curr)
-        self.actor_loss = -q_current.mean()
-        self.actor_optim.zero_grad()
-        self.actor_loss.backward()
-        self.actor_optim.step()
+        
 
         # TODO(Lab-07): Update target network and epsilon noise
-        self.soft_update()
-        if self.epsilon > self.epsilon_params[1]:
-            self.epsilon -= self.epsilon_params[2]
-        else:
-            self.epsilon = self.epsilon_params[1]
+        
 
         return float(self.actor_loss.detach().cpu().numpy()), float(self.critic_loss.detach().cpu().numpy())
